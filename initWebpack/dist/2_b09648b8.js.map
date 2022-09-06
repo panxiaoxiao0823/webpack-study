@@ -1,1 +1,0 @@
-{"version":3,"file":"2_b09648b8.js","sources":["webpack:///./src/views/search/text.js"],"sourcesContent":["import React from 'react';\n\nexport default () => <div>This is Text Component.</div>"],"mappings":";;;;;;AAAA;AAAA;AAAA;AAAA;AAEA;AAAA;AAAA;;;;A","sourceRoot":""}

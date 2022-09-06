@@ -3,7 +3,15 @@ import ReactDom from "react-dom";
 import "./search.less";
 import ImgShow from '../../assets/images/1.jpeg'
 import '../../common/common';
+// ES Module
 import resLargeNumber from 'res-large-number'
+// CJS
+// const resLargeNumber = require('res-large-number')
+// AMD
+// require(['res-large-number'], function (resLargeNumber) {
+//   largeNum  = resLargeNumber('999999999', '1');
+//   console.log('largeNum==>', largeNum);
+// })
 
 class Search extends React.Component {
 
