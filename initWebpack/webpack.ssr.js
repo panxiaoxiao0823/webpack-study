@@ -56,7 +56,7 @@ module.exports = {
     path: path.join(__dirname, "dist"),
     // filename: "[name]_[chunkhash:8].js",
     filename: "[name]-server.js",
-    libraryTarget: 'umd'
+    libraryTarget: 'umd' // 注意，ssr这里需要指定libraryTarget
   },
   plugins: [
     new MiniCssExtractPlugin({
