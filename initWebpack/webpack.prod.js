@@ -8,6 +8,7 @@ const webpack = require("webpack");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const glob = require("glob");
 const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 // 设置多页面打包方案
 const setMPA = () => {
@@ -99,6 +100,7 @@ module.exports = {
     // }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new CleanWebpackPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
   ].concat(htmlWebpackPlugins),
   module: {
     rules: [
@@ -185,7 +187,7 @@ module.exports = {
       },
     ],
   },
-  mode: "none",
+  mode: "production",
   devtool: "cheap-module-source-map",
   // externals: {
   //   react: 'React',
@@ -203,4 +205,5 @@ module.exports = {
       },
     },
   },
+  stats: 'errors-only'
 };

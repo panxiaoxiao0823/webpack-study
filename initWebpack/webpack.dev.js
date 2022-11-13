@@ -7,6 +7,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const webpack = require("webpack");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const glob = require('glob');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 // 设置多页面打包方案
 const setMPA = () => {
@@ -74,7 +75,8 @@ module.exports = {
     //   },
     //   base: "https://example.com/path/page.html",
     // }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
   ].concat(htmlWebpackPlugins),
   module: {
     rules: [
@@ -123,6 +125,7 @@ module.exports = {
   mode: "development",
   devServer: {
     contentBase: "./dist",
-    hot: true
+    hot: true,
+    stats: 'errors-only'
   },
 };
