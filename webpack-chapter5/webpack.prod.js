@@ -10,6 +10,7 @@ const glob = require("glob");
 const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 // const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin'); // 分析构建速度插件
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const smp = new SpeedMeasureWebpackPlugin();
 
@@ -104,6 +105,7 @@ module.exports = smp.wrap({
     new webpack.optimize.ModuleConcatenationPlugin(),
     new CleanWebpackPlugin(),
     // new FriendlyErrorsWebpackPlugin(),
+    new BundleAnalyzerPlugin(),
   ].concat(htmlWebpackPlugins),
   module: {
     rules: [
