@@ -9,10 +9,11 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const glob = require("glob");
 const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 // const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin'); // 分析构建速度插件
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+// const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin'); // 分析构建速度插件
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
-const smp = new SpeedMeasureWebpackPlugin();
+// const smp = new SpeedMeasureWebpackPlugin();
+const TerserPlugin = require('terser-webpack-plugin');
 
 // 设置多页面打包方案
 const setMPA = () => {
@@ -55,7 +56,7 @@ const setMPA = () => {
 
 const { entry, htmlWebpackPlugins } = setMPA();
 
-module.exports = smp.wrap({
+module.exports = {
   entry: entry,
   output: {
     path: path.join(__dirname, "dist"),
@@ -105,7 +106,7 @@ module.exports = smp.wrap({
     new webpack.optimize.ModuleConcatenationPlugin(),
     new CleanWebpackPlugin(),
     // new FriendlyErrorsWebpackPlugin(),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ].concat(htmlWebpackPlugins),
   module: {
     rules: [
@@ -113,6 +114,12 @@ module.exports = smp.wrap({
         test: /\.js$/,
         exclude: /node_modules/,
         use: [
+          {
+            loader: 'thread-loader', // 并行构建
+            options: {
+                workers: 3 // 开启3个worker进行打包
+            }
+          },
           'babel-loader',
           // 'eslint-loader'
         ]
@@ -198,17 +205,25 @@ module.exports = smp.wrap({
   //   react: 'React',
   //   'react-dom': 'ReactDOM',
   // },
+  // optimization: {
+  //   splitChunks: {
+  //     minSize: 1000,
+  //     cacheGroups: {
+  //       commons: {
+  //         name: "commons",
+  //         chunks: "all",
+  //         minChunks: 2,
+  //       },
+  //     },
+  //   },
+  // },
   optimization: {
-    splitChunks: {
-      minSize: 1000,
-      cacheGroups: {
-        commons: {
-          name: "commons",
-          chunks: "all",
-          minChunks: 2,
-        },
-      },
-    },
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        // cache: true
+      }) // 并行压缩
+    ]
   },
   stats: 'errors-only'
-});
+};
