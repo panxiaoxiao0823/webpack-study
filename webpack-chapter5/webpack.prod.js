@@ -107,6 +107,9 @@ module.exports = {
     new CleanWebpackPlugin(),
     // new FriendlyErrorsWebpackPlugin(),
     // new BundleAnalyzerPlugin(),
+    new webpack.DllReferencePlugin({
+      manifest: require('./build/library/library.json')
+    }) // 预编译分包
   ].concat(htmlWebpackPlugins),
   module: {
     rules: [
@@ -225,5 +228,5 @@ module.exports = {
       }) // 并行压缩
     ]
   },
-  stats: 'errors-only'
+  // stats: 'errors-only'
 };
