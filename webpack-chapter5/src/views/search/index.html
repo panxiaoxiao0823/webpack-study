@@ -13,5 +13,10 @@
     以下是react内容：
     <div id="root"><!--HTML_PLACEHOLDER--></div>
     <!--INITIAL_DATA_PLACEHOLDER-->
+
+    <!-- 引入分包编译文件 -->
+    <% for(var i = 0;i < htmlWebpackPlugin.options.dlls.length;i++) {%>
+      <script src="<%=htmlWebpackPlugin.options.dlls[i]%>"></script>
+    <%}%>
   </body>
 </html>

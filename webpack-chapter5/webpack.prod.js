@@ -20,6 +20,8 @@ const setMPA = () => {
   const entry = {};
   const htmlWebpackPlugins = [];
   const entryFiles = glob.sync(path.join(__dirname, "./src/views/*/index.js"));
+  const dllFiles = glob.sync(path.join(__dirname, "./build/library/*.js"));
+  const dllFilesName = dllFiles.map(dllFile => '../build/library/' + dllFile.split('/').slice(-1)); // ["./build/library/library_[hash].dll.js"]
 
   Object.keys(entryFiles).map((index) => {
     const entryFile = entryFiles[index];
@@ -44,6 +46,7 @@ const setMPA = () => {
           minifyJS: true,
           removeComments: false,
         },
+        dlls: dllFilesName
       })
     );
   });

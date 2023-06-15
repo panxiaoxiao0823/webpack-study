@@ -1,6 +1,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -10,14 +11,15 @@ module.exports = {
     ]
   },
   output: {
-    filename: '[name]_[chunkhash].dll.js', // 构建出的基础包文件名称
+    filename: '[name]_[hash].dll.js', // 构建出的基础包文件名称
     path: path.join(__dirname, 'build/library'), // 构建的基础包输出地方
-    library: '[name]'
+    library: '[name]_[hash]'
   },
   plugins: [
     new webpack.DllPlugin({
       name: '[name]_[hash]',
       path: path.join(__dirname, 'build/library/[name].json') // 生成的manifest.json文件位置
-    })
+    }),
+    new CleanWebpackPlugin(),
   ]
 }
