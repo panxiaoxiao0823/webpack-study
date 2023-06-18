@@ -4,6 +4,7 @@ import ReactDom from "react-dom";
 import "./search.less";
 import ImgShow from '../../assets/images/1.jpeg'
 import '../../common/common';
+import bg from '../../assets/images/bg.jpg'
 
 
 // ES Module
@@ -53,6 +54,8 @@ class Search extends React.Component {
         <br />
         展示图片：
         <img className="search-img" onClick={this.loadText.bind(this)} src={ ImgShow } />
+        <br />
+        <img src={ bg }></img>
         <br />
         <p>My name is：007</p>
         {Text ? <div>动态加载Text组件：{<Text />}</div> : null}
