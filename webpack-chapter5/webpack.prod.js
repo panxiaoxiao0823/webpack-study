@@ -14,6 +14,7 @@ const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 
 // const smp = new SpeedMeasureWebpackPlugin();
 const TerserPlugin = require('terser-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 // 设置多页面打包方案
 const setMPA = () => {
@@ -112,7 +113,8 @@ module.exports = {
     // new BundleAnalyzerPlugin(),
     new webpack.DllReferencePlugin({
       manifest: require('./build/library/library.json')
-    }) // 预编译分包
+    }), // 预编译分包
+    new HardSourceWebpackPlugin(),
   ].concat(htmlWebpackPlugins),
   module: {
     rules: [
@@ -123,10 +125,10 @@ module.exports = {
           {
             loader: 'thread-loader', // 并行构建
             options: {
-                workers: 3 // 开启3个worker进行打包
+                workers: 3 // 开启3个worker进行打terser-webpack-plugin包
             }
           },
-          'babel-loader',
+          'babel-loader?cacheDirectory=true',
           // 'eslint-loader'
         ]
       },
@@ -227,7 +229,7 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        // cache: true
+        cache: true
       }) // 并行压缩
     ]
   },
