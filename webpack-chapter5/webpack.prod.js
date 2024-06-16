@@ -14,6 +14,7 @@ const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 
 // const smp = new SpeedMeasureWebpackPlugin();
 const TerserPlugin = require('terser-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 // 设置多页面打包方案
 const setMPA = () => {
@@ -112,7 +113,8 @@ module.exports = {
     // new BundleAnalyzerPlugin(),
     new webpack.DllReferencePlugin({
       manifest: require('./build/library/library.json')
-    }) // 预编译分包
+    }), // 预编译分包
+    new HardSourceWebpackPlugin(),
   ].concat(htmlWebpackPlugins),
   module: {
     rules: [
@@ -123,10 +125,10 @@ module.exports = {
           {
             loader: 'thread-loader', // 并行构建
             options: {
-                workers: 3 // 开启3个worker进行打包
+                workers: 3 // 开启3个worker进行打terser-webpack-plugin包
             }
           },
-          'babel-loader',
+          'babel-loader?cacheDirectory=true',
           // 'eslint-loader'
         ]
       },
@@ -190,6 +192,30 @@ module.exports = {
               name: "[name]_[hash:8].[ext]",
             },
           },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                progressive: true,
+                quality: 65
+              },
+              // optipng.enabled: false will disable optipng
+              optipng: {
+                enabled: false,
+              },
+              pngquant: {
+                quality: '65-90',
+                speed: 4
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+              // the webp option will enable WEBP
+              webp: {
+                quality: 75
+              }
+            }
+          }
         ],
       },
       {
@@ -227,9 +253,17 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        // cache: true
+        cache: true
       }) // 并行压缩
     ]
   },
+  resolve: {
+    alias: {
+      'react': path.resolve(__dirname, './node_modules/react/umd/react.production.min.js'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom/umd/react-dom.production.min.js'),
+    }, // 减少业务组件中import react 的查询，直接到指定位置查询，减少文件搜索范围
+    extensions: ['.js'], // 业务中引入模块时不带扩展时，尝试按顺序解析这些后缀名。如果有多个文件有相同的名字，但后缀名不同，webpack 会解析列在数组首位的后缀的文件并跳过其余的后缀，减少文件搜索范围；适用于ts文件 extensions: ['.ts', '...'] ，优先查找ts文件，没有ts文件则按照默认数组查询(...)
+    mainFields: ['main'], // 指定不同环境下都适用package.json中的main字段作为入口文件
+  }
   // stats: 'errors-only'
 };
